@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 /**
  * @author joe
- * 帮助类
+ * 数据库基本操作类
  */
 public class DatabaseHelper {
 
@@ -17,7 +17,7 @@ public class DatabaseHelper {
     public static Connection getConnection(){
         Connection connection;
         try {
-            Class.forName("com.mysql.");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
             return connection;
         } catch (ClassNotFoundException | SQLException e) {
