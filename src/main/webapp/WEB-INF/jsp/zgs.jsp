@@ -9,10 +9,10 @@
 <%@ page pageEncoding="UTF-8" language="java" %>
 <html>
 <head>
-    <title>我是谁</title>
+    <title>天地不仁以万物为刍狗</title>
 </head>
 <body>
-<h1>天地不仁以万物为刍狗</h1>
+<h1>当前时间${currentDateTime}</h1>
 <p>用户${userName}</p>
 </body>
 </html>
