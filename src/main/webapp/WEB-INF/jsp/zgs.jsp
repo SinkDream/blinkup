@@ -12,7 +12,15 @@
     <title>${userName}</title>
 </head>
 <body>
-<h1>当前时间${currentDateTime}</h1>
-<p>用户${userName}</p>
+    <form>
+        <fieldset>
+            <legend><h3>一拳</h3></legend>
+                <p>访问时间${currentDateTime}</p>
+                <p>用户${userName}</p>
+
+        </fieldset>
+    </form>
+
+
 </body>
 </html>

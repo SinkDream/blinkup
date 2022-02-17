@@ -22,5 +22,6 @@ public class SimpleTestServlet extends HttpServlet {
         req.setAttribute("userName", "张国圣");
         req.getRequestDispatcher("/WEB-INF/jsp/zgs.jsp")
                 .forward(req,resp);
+        System.out.println("实时更新");
     }
 }
