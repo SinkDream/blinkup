@@ -5,4 +5,5 @@ package cn.blinkup.orm.config;
  */
 public class DatabaseConfig {
 
+    private static final String KEY = "货币";
 }
