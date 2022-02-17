@@ -8,8 +8,11 @@ import java.util.List;
  * @author zhangguosheng
  */
 public class GetConfigProperties {
-    Yaml yaml = new Yaml();
-    List<String> ret = yaml.load(this.getClass().getClassLoader().getResourceAsStream("application.yaml"));
-    
+
+    public GetConfigProperties(){
+        Yaml yaml = new Yaml();
+        List<String> ret = yaml.load(this.getClass().getClassLoader().getResourceAsStream("application.yaml"));
+        ret.forEach(System.out::println);
+    }
 
 }
