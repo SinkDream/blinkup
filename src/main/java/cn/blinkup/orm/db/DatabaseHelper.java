@@ -1,8 +1,6 @@
 package cn.blinkup.orm.db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * @author joe
@@ -10,9 +8,9 @@ import java.sql.SQLException;
  */
 public class DatabaseHelper {
 
-    private static final String USER_NAME = "";
-    private static final String PASSWORD = "";
-    private static final String URL = "";
+    private static final String USER_NAME = "root";
+    private static final String PASSWORD = "123456";
+    private static final String URL = "jdbc:mysql://localhost:3306/aktest?useUnicode=true&characterEncoding=utf-8";
 
     public static Connection getConnection(){
         Connection connection;
@@ -34,5 +32,28 @@ public class DatabaseHelper {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void Query(String sql, String ... args){
+        Connection conn = getConnection();
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = conn.prepareStatement(sql);
+            for (int i = 0; i < args.length; i++) {
+                preparedStatement.setString(i + 1, args[i]);
+            }
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                String a = resultSet.getString("name");
+                System.out.println(resultSet.getString("contract"));
+                System.out.println(resultSet.getString("email"));
+                System.out.println(a);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
     }
 }
