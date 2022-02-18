@@ -1,3 +1,6 @@
 # 说明
-blinkup基于apache的dbutil，致力于java开发人员持久层快速开发；
-项目于20K22年2月9日正式启动，将会在gitee开源，敬请期待。
+blinkup参考黄勇老师的smart-framework搭建，基于此基础上进行优化
+## TODO
+* 数据库查询缓存
+* 自定义线程池
+* controller单例化
