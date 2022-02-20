@@ -102,5 +102,19 @@ public class DatabaseHelper {
         return result;
     }
 
+    public static int execute(String sql, Object...params){
+        int recordRows = 0;
+        try{
+            Connection connection = getConnection();
+            recordRows = QUERY_RUNNER.update(sql, params);
+        } catch (SQLException sqlException) {
+            logger.error("sql错误：" + sqlException);
+            throw new RuntimeException(sqlException);
+        } finally {
+            closeConnection();;
+        }
+        return recordRows;
+    }
+
 
 }
