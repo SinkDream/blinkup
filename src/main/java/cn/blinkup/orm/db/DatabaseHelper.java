@@ -4,11 +4,13 @@ import cn.blinkup.orm.utils.PropsUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -85,4 +87,20 @@ public class DatabaseHelper {
         }
         return entity;
     }
+
+    public static List<Map<String, Object>> queryUnionSet(String sql, Object...params){
+        List<Map<String, Object>> result;
+        try{
+            Connection connection = getConnection();
+            result = QUERY_RUNNER.query(connection, sql, new MapListHandler(), params);
+        } catch (SQLException sqlException) {
+            logger.error("sql错误：" + sqlException);
+            throw new RuntimeException(sqlException);
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
+
+
 }
