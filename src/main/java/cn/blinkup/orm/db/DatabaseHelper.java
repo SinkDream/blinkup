@@ -103,7 +103,7 @@ public class DatabaseHelper {
     }
 
     public static int execute(String sql, Object...params){
-        int recordRows = 0;
+        int recordRows;
         try{
             Connection connection = getConnection();
             recordRows = QUERY_RUNNER.update(sql, params);
@@ -111,7 +111,7 @@ public class DatabaseHelper {
             logger.error("sql错误：" + sqlException);
             throw new RuntimeException(sqlException);
         } finally {
-            closeConnection();;
+            closeConnection();
         }
         return recordRows;
     }
