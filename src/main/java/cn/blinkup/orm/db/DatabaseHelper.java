@@ -2,6 +2,7 @@ package cn.blinkup.orm.db;
 
 import cn.blinkup.orm.utils.PropsUtil;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,8 @@ public class DatabaseHelper {
         return connection;
     }
 
-    public static void closeConnection(Connection connection){
+    public static void closeConnection(){
+        Connection connection = CONNECTION_THREAD_LOCAL.get();
         if(null != connection){
             try {
                 connection.close();
@@ -65,8 +67,22 @@ public class DatabaseHelper {
         } catch (SQLException sqlException) {
             logger.error("sql错误：" + sqlException);
         } finally {
-          closeConnection(connection);
+          closeConnection();
         }
         return entityList;
+    }
+
+    public static <T> T queryEntity(Class<T> entityClass, String sql, Object...params){
+        T entity;
+        try{
+            Connection connection = getConnection();
+            entity = QUERY_RUNNER.query(connection, sql, new BeanHandler<>(entityClass), params);
+        } catch (SQLException sqlException) {
+            logger.error("sql错误：" + sqlException);
+            throw new RuntimeException(sqlException);
+        } finally {
+            closeConnection();
+        }
+        return entity;
     }
 }

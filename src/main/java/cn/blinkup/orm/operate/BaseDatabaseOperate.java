@@ -22,12 +22,12 @@ public class BaseDatabaseOperate {
         Connection conn = DatabaseHelper.getConnection();
         try {
             assert conn != null;
-            PreparedStatement pstm = conn.prepareStatement(sql);
-            success = pstm.execute();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            success = preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }finally {
-            DatabaseHelper.closeConnection(conn);
+            DatabaseHelper.closeConnection();
         }
         return success;
     }
