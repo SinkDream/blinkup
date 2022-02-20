@@ -1,8 +1,13 @@
 package cn.blinkup.orm.db;
 
 import cn.blinkup.orm.utils.PropsUtil;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -16,7 +21,9 @@ public class DatabaseHelper {
     private static String URL;
     private static String DRIVER;
 
+    private static final QueryRunner QUERY_RUNNER = new QueryRunner();
 
+    private static Logger logger = LoggerFactory.getLogger(DatabaseHelper.class);
 
     public static Connection getConnection(){
         Connection connection;
@@ -66,7 +73,18 @@ public class DatabaseHelper {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
 
-
+    public static<T> List<T> queryEntityList(Class<T> entityClass, String sql, Object...params){
+        List<T> entityList = null;
+        Connection connection = getConnection();
+        try{
+            entityList = QUERY_RUNNER.query(connection, sql, new BeanListHandler<T>(entityClass), params);
+        } catch (SQLException sqlException) {
+            logger.error("sql错误：" + sqlException);
+        } finally {
+          closeConnection(connection);
+        }
+        return entityList;
     }
 }
