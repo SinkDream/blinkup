@@ -1,6 +1,8 @@
 package cn.blinkup.orm.utils;
 
-import org.apache.log4j.Logger;
+
+
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
@@ -14,7 +16,7 @@ import java.util.Properties;
  */
 public class PropsUtil {
 
-    private static final Logger LOGGER = (Logger) LoggerFactory.getLogger(PropsUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropsUtil.class);
 
     public static Properties loadProps(String fileName){
         Properties props = null;

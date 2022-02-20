@@ -1,9 +1,17 @@
 package cn.blinkup.orm.service;
 
-import cn.blinkup.orm.utils.PropsUtil;
+import cn.blinkup.orm.db.DatabaseHelper;
+import cn.blinkup.orm.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author joe
@@ -11,18 +19,7 @@ import java.util.Properties;
  */
 public class UserService {
 
-    private static final String DRIVER;
-    private static final String URL;
-    private static final String USERNAME;
-    private static final String PASSWORD;
-
-    static {
-        Properties conf = PropsUtil.loadProps("config.properties");
-        DRIVER = conf.getProperty("jdbc.driver");
-        URL = conf.getProperty("jdbc.url");
-        USERNAME = conf.getProperty("jdbc.username");
-        PASSWORD = conf.getProperty("jdbc.password");
-    }
+    Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public void createUser(Map<String, Object> userParamMap){
         //todo
@@ -40,7 +37,33 @@ public class UserService {
         //todo
     }
 
-    public void getUserList(Map<String, Object> listParamMap){
-        //todo
+    public List<User> getUserList(Map<String, Object> listParamMap){
+        Connection connection = null;
+        List<User> userList = new ArrayList<>();
+        try{
+            String sql = "select * from user";
+            connection = DatabaseHelper.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                User user = new User();
+                user.setId(resultSet.getLong("id"));
+                user.setName(resultSet.getString("name"));
+                user.setPhone(resultSet.getString("phone"));
+                user.setEmail(resultSet.getString("email"));
+                userList.add(user);
+            }
+        } catch (SQLException sqlException) {
+            logger.error("sql错误：" + sqlException);
+        } finally {
+          if(null != connection){
+              try {
+                  connection.close();
+              } catch (SQLException sqlException) {
+                  logger.error("关闭数据库连接错误：" + sqlException);
+              }
+          }
+        }
+        return userList;
     }
 }

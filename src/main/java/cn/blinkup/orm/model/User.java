@@ -6,10 +6,8 @@ package cn.blinkup.orm.model;
 public class User {
     private long id;
     private String name;
-    private String contract;
     private String phone;
     private String email;
-    private String remark;
 
     public long getId() {
         return id;
@@ -27,13 +25,6 @@ public class User {
         this.name = name;
     }
 
-    public String getContract() {
-        return contract;
-    }
-
-    public void setContract(String contract) {
-        this.contract = contract;
-    }
 
     public String getPhone() {
         return phone;
@@ -51,11 +42,4 @@ public class User {
         this.email = email;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
 }

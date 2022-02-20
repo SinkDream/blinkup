@@ -1,6 +1,9 @@
 package cn.blinkup.orm.db;
 
+import cn.blinkup.orm.utils.PropsUtil;
+
 import java.sql.*;
+import java.util.Properties;
 
 /**
  * @author joe
@@ -8,15 +11,25 @@ import java.sql.*;
  */
 public class DatabaseHelper {
 
-    private static final String USER_NAME = "root";
-    private static final String PASSWORD = "123456";
-    private static final String URL = "jdbc:mysql://localhost:3306/aktest?useUnicode=true&characterEncoding=utf-8";
+    private static String USERNAME;
+    private static String PASSWORD;
+    private static String URL;
+    private static String DRIVER;
+
+
 
     public static Connection getConnection(){
         Connection connection;
+         {
+            Properties conf = PropsUtil.loadProps("config.properties");
+            DRIVER = conf.getProperty("jdbc.driver");
+            URL = conf.getProperty("jdbc.url");
+            USERNAME = conf.getProperty("jdbc.username");
+            PASSWORD = conf.getProperty("jdbc.password");
+        }
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+            Class.forName(DRIVER);
+            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             return connection;
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
