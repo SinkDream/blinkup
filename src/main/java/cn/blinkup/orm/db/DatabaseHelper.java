@@ -15,7 +15,7 @@ import java.util.Properties;
 
 /**
  * @author joe
- * 数据库基本操作类
+ * 数据库帮助类
  */
 public class DatabaseHelper {
     private static final QueryRunner QUERY_RUNNER = new QueryRunner();
@@ -35,6 +35,10 @@ public class DatabaseHelper {
         PASSWORD = conf.getProperty("jdbc.password");
     }
 
+    /**
+     * 获取数据库连接
+     * @return Connection对象
+     */
     public static Connection getConnection(){
         Connection connection = CONNECTION_THREAD_LOCAL.get();
         if(null == connection){
@@ -48,6 +52,9 @@ public class DatabaseHelper {
         return connection;
     }
 
+    /**
+     * 关闭数据库连接
+     */
     public static void closeConnection(){
         Connection connection = CONNECTION_THREAD_LOCAL.get();
         if(null != connection){
@@ -61,6 +68,14 @@ public class DatabaseHelper {
         }
     }
 
+    /**
+     * 查询实体列表
+     * @param entityClass 实体类class
+     * @param sql sql语句
+     * @param params sql参数
+     * @param <T> 返回的对应实体类对象类型
+     * @return 实体类对应对象类型
+     */
     public static<T> List<T> queryEntityList(Class<T> entityClass, String sql, Object...params){
         List<T> entityList = null;
         Connection connection = getConnection();
@@ -74,6 +89,14 @@ public class DatabaseHelper {
         return entityList;
     }
 
+    /**
+     * 查询单个实体
+     * @param entityClass 实体类class
+     * @param sql sql语句
+     * @param params sql参数
+     * @param <T> 实体类的对象类型
+     * @return 单个实体类
+     */
     public static <T> T queryEntity(Class<T> entityClass, String sql, Object...params){
         T entity;
         try{
@@ -88,6 +111,12 @@ public class DatabaseHelper {
         return entity;
     }
 
+    /**
+     * 查询连接查询后的结果集
+     * @param sql sql语句
+     * @param params sql参数
+     * @return 连接查询后的数据内容
+     */
     public static List<Map<String, Object>> queryUnionSet(String sql, Object...params){
         List<Map<String, Object>> result;
         try{
@@ -102,6 +131,12 @@ public class DatabaseHelper {
         return result;
     }
 
+    /**
+     * 执行数据更新操作
+     * @param sql sql语句
+     * @param params sql参数
+     * @return 执行更新的数据行数
+     */
     public static int execute(String sql, Object...params){
         int recordRows;
         try{
