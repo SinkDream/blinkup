@@ -140,7 +140,7 @@ public class DatabaseHelper {
         int recordRows;
         try{
             Connection connection = getConnection();
-            recordRows = QUERY_RUNNER.update(sql, params);
+            recordRows = QUERY_RUNNER.update(connection, sql, params);
         } catch (SQLException sqlException) {
             logger.error("sql错误：" + sqlException);
             throw new RuntimeException(sqlException);
@@ -182,6 +182,26 @@ public class DatabaseHelper {
         Object[] param = fieldMap.values().toArray();
         return execute(sql, param) == 1;
     }
+
+    public static <T> boolean updateEntity(Class<T> clazz, long id, Map<String, Object> filedMap){
+        if(CollectionUtils.isEmpty(Collections.singleton(filedMap))){
+            logger.error("参数map为空");
+            return false;
+        }
+        String sql = "UPDATE " + getTableName(clazz) + " SET ";
+        StringBuilder columns = new StringBuilder();
+        filedMap.forEach((k,v) ->{
+            columns.append(k).append("=?, ");
+        });
+        sql += columns.substring(0, columns.length() - 1) + " WHERE id=?";
+        List<Object> paramList = new ArrayList<>();
+        paramList.addAll(filedMap.values());
+        paramList.add(id);
+        Object[] params = paramList.toArray();
+        return execute(sql, params) == 1;
+    }
+
+
 
 
 }
