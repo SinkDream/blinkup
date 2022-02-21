@@ -1,6 +1,7 @@
 package cn.blinkup.orm.db;
 
 import cn.blinkup.orm.utils.PropsUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -9,9 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author joe
@@ -149,6 +148,39 @@ public class DatabaseHelper {
             closeConnection();
         }
         return recordRows;
+    }
+
+    /**
+     * 根据类名获取表名
+     * @param clazz 类名
+     * @return 类名
+     */
+    private static String getTableName(Class<?> clazz){
+        return clazz.getSimpleName();
+    }
+
+    /**
+     * 插入单个实体
+     * @param entityClass 实体类class
+     * @param fieldMap 插入数据
+     * @param <T> 类
+     * @return 是否成功
+     */
+    public static<T> boolean insertEntity(Class<T> entityClass, Map<String, Object> fieldMap){
+        if(CollectionUtils.isEmpty(Collections.singleton((fieldMap)))){
+            logger.error("字段集合为空");
+            return false;
+        }
+        String sql = "INSERT INTO " + getTableName(entityClass);
+        StringBuilder columns = new StringBuilder("(");
+        StringBuilder values = new StringBuilder("(");
+        fieldMap.forEach((k,v) ->{
+            columns.append(k).append(",");
+            values.append(v).append(",");
+        });
+        sql += columns.substring(0, columns.length() - 1) + ")" + "VALUES" + values.substring(0, values.length() - 1) + ")";
+        Object[] param = fieldMap.values().toArray();
+        return execute(sql, param) == 1;
     }
 
 
