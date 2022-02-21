@@ -201,6 +201,11 @@ public class DatabaseHelper {
         return execute(sql, params) == 1;
     }
 
+    public static <T> boolean deleteEntity(Class<T> clazz, long id){
+        String sql = "DELETE FROM " + getTableName(clazz) + "WHERE id=?";
+        return execute(sql, id) == 1;
+    }
+
 
 
 
