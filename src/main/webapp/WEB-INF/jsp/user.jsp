@@ -1,4 +1,5 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="zgs" uri="http://java.sun.com/jsp/jstl/core" %>
+<zgs:set var="ZGS" value="${pageContext.request.contextPath}"/>
 <%--
   Created by IntelliJ IDEA.
   User: zhangguosheng
@@ -24,18 +25,17 @@
                     <th>手机号</th>
                     <th>邮箱</th>
                 </tr>
-                <c:forEach var="user" items="${userList}">
+                <zgs:forEach var="user" items="${userList}">
                     <tr>
                         <td>${user.name}</td>
                         <td>${user.phone}</td>
                         <td>${user.email}</td>
                         <td>
-                            <a href="#">修改</a>
-                            <a href="#">删除</a>
+                            <a href="${ZGS}/user_edit?id=${user.id}">修改</a>
+                            <a href="${ZGS}/user_delete?id=${user.id}">删除</a>
                         </td>
                     </tr>
-
-                </c:forEach>
+                </zgs:forEach>
 
             </table>
         </fieldset>
