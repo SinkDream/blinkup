@@ -26,8 +26,6 @@ public class BaseDatabaseOperate {
             success = preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            DatabaseHelper.closeConnection();
         }
         return success;
     }
