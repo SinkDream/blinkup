@@ -172,13 +172,13 @@ public class DatabaseHelper {
             return false;
         }
         String sql = "INSERT INTO " + getTableName(entityClass);
-        StringBuilder columns = new StringBuilder("(");
-        StringBuilder values = new StringBuilder("(");
+        StringBuilder columns = new StringBuilder(" (");
+        StringBuilder values = new StringBuilder(" (");
         fieldMap.forEach((k,v) ->{
             columns.append(k).append(",");
-            values.append(v).append(",");
+            values.append("?").append(",");
         });
-        sql += columns.substring(0, columns.length() - 1) + ")" + "VALUES" + values.substring(0, values.length() - 1) + ")";
+        sql += columns.substring(0, columns.length() - 1) + ") " + "VALUES" + values.substring(0, values.length() - 1) + ") ";
         Object[] param = fieldMap.values().toArray();
         return execute(sql, param) == 1;
     }
@@ -193,16 +193,17 @@ public class DatabaseHelper {
         filedMap.forEach((k,v) ->{
             columns.append(k).append("=?, ");
         });
-        sql += columns.substring(0, columns.length() - 1) + " WHERE id=?";
+        sql += columns.substring(0, columns.length() - 2) + " WHERE id=?";
         List<Object> paramList = new ArrayList<>();
         paramList.addAll(filedMap.values());
         paramList.add(id);
         Object[] params = paramList.toArray();
+        System.out.println(sql);
         return execute(sql, params) == 1;
     }
 
     public static <T> boolean deleteEntity(Class<T> clazz, long id){
-        String sql = "DELETE FROM " + getTableName(clazz) + "WHERE id=?";
+        String sql = "DELETE FROM " + getTableName(clazz) + " WHERE id=?";
         return execute(sql, id) == 1;
     }
 

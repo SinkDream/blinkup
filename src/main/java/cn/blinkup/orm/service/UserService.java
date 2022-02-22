@@ -21,20 +21,21 @@ public class UserService {
 
     Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public void createUser(Map<String, Object> userParamMap){
-        //todo
+    public boolean createUser(Map<String, Object> userParamMap){
+        return DatabaseHelper.insertEntity(User.class, userParamMap);
     }
 
-    public void deleteUser(long userId){
-        //todo
+    public boolean deleteUser(long userId){
+        return DatabaseHelper.deleteEntity(User.class, userId);
     }
 
-    public void updateUser(Map<String, Object> userParamMap){
-        //todo
+    public boolean updateUser(long userId, Map<String, Object> userParamMap){
+        return DatabaseHelper.updateEntity(User.class, userId, userParamMap);
     }
 
-    public void getUserDetail(long userId){
-        //todo
+    public User getUserDetail(long userId){
+        String sql = "select * from user";
+        return DatabaseHelper.queryEntity(User.class, sql, null);
     }
 
     public List<User> getUserList(Map<String, Object> listParamMap){
