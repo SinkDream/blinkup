@@ -2,6 +2,7 @@ package cn.blinkup.orm.db;
 
 import cn.blinkup.orm.utils.PropsUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -17,21 +18,26 @@ import java.util.*;
  * 数据库帮助类
  */
 public class DatabaseHelper {
-    private static final QueryRunner QUERY_RUNNER = new QueryRunner();
+    private static final QueryRunner QUERY_RUNNER;
     private static final Logger logger = LoggerFactory.getLogger(DatabaseHelper.class);
-    private static final ThreadLocal<Connection> CONNECTION_THREAD_LOCAL = new ThreadLocal<>();
-
-    private static final String USERNAME;
-    private static final String PASSWORD;
-    private static final String URL;
-    private static final String DRIVER;
+    private static final ThreadLocal<Connection> CONNECTION_THREAD_LOCAL;
+    private static final BasicDataSource DATA_SOURCE;
 
     static {
+        CONNECTION_THREAD_LOCAL = new ThreadLocal<Connection>();
+        QUERY_RUNNER = new QueryRunner();
+
         Properties conf = PropsUtil.loadProps("config.properties");
-        DRIVER = conf.getProperty("jdbc.driver");
-        URL = conf.getProperty("jdbc.url");
-        USERNAME = conf.getProperty("jdbc.username");
-        PASSWORD = conf.getProperty("jdbc.password");
+        String driver = conf.getProperty("jdbc.driver");
+        String url = conf.getProperty("jdbc.url");
+        String userName = conf.getProperty("jdbc.username");
+        String password = conf.getProperty("jdbc.password");
+
+        DATA_SOURCE = new BasicDataSource();
+        DATA_SOURCE.setUrl(url);
+        DATA_SOURCE.setDriverClassName(driver);
+        DATA_SOURCE.setUsername(userName);
+        DATA_SOURCE.setPassword(password);
     }
 
     /**
@@ -42,29 +48,14 @@ public class DatabaseHelper {
         Connection connection = CONNECTION_THREAD_LOCAL.get();
         if(null == connection){
             try {
-                Class.forName(DRIVER);
-                connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            } catch (ClassNotFoundException | SQLException e) {
+                connection = DATA_SOURCE.getConnection();
+            } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                CONNECTION_THREAD_LOCAL.set(connection);
             }
         }
         return connection;
-    }
-
-    /**
-     * 关闭数据库连接
-     */
-    public static void closeConnection(){
-        Connection connection = CONNECTION_THREAD_LOCAL.get();
-        if(null != connection){
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }finally {
-                CONNECTION_THREAD_LOCAL.remove();
-            }
-        }
     }
 
     /**
@@ -82,8 +73,6 @@ public class DatabaseHelper {
             entityList = QUERY_RUNNER.query(connection, sql, new BeanListHandler<>(entityClass), params);
         } catch (SQLException sqlException) {
             logger.error("sql错误：" + sqlException);
-        } finally {
-          closeConnection();
         }
         return entityList;
     }
@@ -104,8 +93,6 @@ public class DatabaseHelper {
         } catch (SQLException sqlException) {
             logger.error("sql错误：" + sqlException);
             throw new RuntimeException(sqlException);
-        } finally {
-            closeConnection();
         }
         return entity;
     }
@@ -124,8 +111,6 @@ public class DatabaseHelper {
         } catch (SQLException sqlException) {
             logger.error("sql错误：" + sqlException);
             throw new RuntimeException(sqlException);
-        } finally {
-            closeConnection();
         }
         return result;
     }
@@ -144,8 +129,6 @@ public class DatabaseHelper {
         } catch (SQLException sqlException) {
             logger.error("sql错误：" + sqlException);
             throw new RuntimeException(sqlException);
-        } finally {
-            closeConnection();
         }
         return recordRows;
     }
@@ -206,8 +189,5 @@ public class DatabaseHelper {
         String sql = "DELETE FROM " + getTableName(clazz) + " WHERE id=?";
         return execute(sql, id) == 1;
     }
-
-
-
 
 }
