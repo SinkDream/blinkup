@@ -102,10 +102,22 @@ public final class CustomizeClassLoader {
             if(file.isFile()){
                 String className = fileName.substring(0, fileName.lastIndexOf("."));
                 if(StringUtils.isNotEmpty(packageName)){
-                    //todo
+                    className = packageName + "." + className;
                 }
+                doAddClass(classSet, className);
+            } else {
+                String subPackagePath = fileName;
+                if(StringUtils.isNotEmpty(packagePath)){
+                    subPackagePath = packagePath + "/" + subPackagePath;
+                }
+                String subPackageName = fileName;
+                if(StringUtils.isNotEmpty(subPackageName)){
+                    subPackageName = packageName + "." + subPackageName;
+                }
+                addClass(classSet, subPackagePath, subPackageName);
             }
         }
+
     }
 
     private static void doAddClass(Set<Class<?>> classSet, String className){
