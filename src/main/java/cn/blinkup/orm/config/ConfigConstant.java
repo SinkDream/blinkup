@@ -5,7 +5,7 @@ package cn.blinkup.orm.config;
  * 配置类常量
  */
 public interface ConfigConstant {
-    String CONFIG_FILE = "properties";
+    String CONFIG_FILE = "config.properties";
     String JDBC_DRIVER = "jdbc.driver";
     String JDBC_URL = "jdbc.url";
     String JDBC_USERNAME = "jdbc.username";
