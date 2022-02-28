@@ -17,11 +17,6 @@ import java.util.Set;
  */
 public final class ControllerHelper {
 
-    /**
-     * url匹配规则
-     */
-    private static final String REGEX = "\\w+:/\\*";
-
     private static final Map<Request, Handler> ACTION_MAP = new HashMap<>();
 
     static{
