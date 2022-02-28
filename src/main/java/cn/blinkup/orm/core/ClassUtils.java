@@ -1,4 +1,4 @@
-package cn.blinkup.orm.utils;
+package cn.blinkup.orm.core;
 
 import cn.blinkup.orm.annotation.Controller;
 import cn.blinkup.orm.annotation.Service;

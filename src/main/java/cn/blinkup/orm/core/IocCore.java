@@ -1,6 +1,8 @@
-package cn.blinkup.orm.utils;
+package cn.blinkup.orm.core;
 
 import cn.blinkup.orm.annotation.Inject;
+import cn.blinkup.orm.core.BeanContainer;
+import cn.blinkup.orm.utils.ReflectionUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -12,7 +14,7 @@ import java.util.Map;
  * @author zhangguosheng
  * 依赖注入助手类
  */
-public class IocHelper {
+public class IocCore {
 
     static{
         //获取所有的Bean类与Bean实例之间的映射关系

@@ -1,4 +1,6 @@
-package cn.blinkup.orm.utils;
+package cn.blinkup.orm.core;
+
+import cn.blinkup.orm.utils.ReflectionUtil;
 
 import java.util.HashMap;
 import java.util.Map;
