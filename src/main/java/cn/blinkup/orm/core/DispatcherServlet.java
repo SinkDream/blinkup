@@ -9,6 +9,7 @@ import cn.blinkup.orm.config.ConfigHelper;
 import cn.blinkup.orm.utils.CodecUtils;
 import cn.blinkup.orm.utils.ReflectionUtil;
 import cn.blinkup.orm.utils.StreamUtils;
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -27,6 +29,9 @@ import java.util.Map;
  * @author zhangguosheng
  */
 public class DispatcherServlet extends HttpServlet {
+
+    private static final String ROOT_CHARACTER = "/";
+
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
         //初始化相关类
@@ -71,10 +76,31 @@ public class DispatcherServlet extends HttpServlet {
             Method actionMethod = handler.getActionMethod();
             Object result = ReflectionUtil.invokeMethod(bean, actionMethod, requestParam);
             if(result instanceof View){
-                //todo 返回jsp页面
+                View view = (View) result;
+                String path = view.getPath();
+                if(StringUtils.isNotEmpty(path)){
+                    if(path.startsWith(ROOT_CHARACTER)){
+                        resp.sendRedirect(req.getContextPath() + path);
+                    }else{
+                        Map<String, Object> model = view.getModel();
+                        model.forEach((k,v) -> {
+                            req.setAttribute(k, v);
+                        });
+                        req.getRequestDispatcher(ConfigHelper.getJSPPath() + path).forward(req, resp);
+                    }
+                }
             }
             else if(result instanceof Data){
-                //todo 返回JSON
+                Data data = (Data) result;
+                Object model = data.getModel();
+                if(null != model){
+                    resp.setContentType("application/json");
+                    resp.setCharacterEncoding("UTF-8");
+                    PrintWriter writer = resp.getWriter();
+                    writer.write(JSON.toJSONString(model));
+                    writer.flush();
+                    writer.close();
+                }
             }
 
         }
