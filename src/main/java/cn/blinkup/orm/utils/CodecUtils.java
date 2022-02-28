@@ -11,8 +11,8 @@ import java.net.URLEncoder;
  * @author zhangguosheng
  * http编码工具类
  */
-public class CodeUtils {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CodeUtils.class);
+public class CodecUtils {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CodecUtils.class);
 
     public static String encodeURL(String source){
         String target = null;

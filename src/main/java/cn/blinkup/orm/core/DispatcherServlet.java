@@ -3,6 +3,7 @@ package cn.blinkup.orm.core;
 import cn.blinkup.orm.FrameLoader;
 import cn.blinkup.orm.bean.Handler;
 import cn.blinkup.orm.config.ConfigHelper;
+import cn.blinkup.orm.utils.CodecUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
@@ -46,6 +47,7 @@ public class DispatcherServlet extends HttpServlet {
                 String paramValue = req.getParameter(paramName);
                 paramMap.put(paramName, paramValue);
             }
+//            String body = CodecUtils.decodeURL()
 
         }
     }
