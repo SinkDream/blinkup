@@ -1,4 +1,4 @@
-package cn.blinkup.orm.model;
+package cn.blinkup.orm.bean;
 
 import java.util.Objects;
 
@@ -16,6 +16,11 @@ public class Request {
      * 请求路径
      */
     private String path;
+
+    public Request(String method, String path) {
+        this.method = method;
+        this.path = path;
+    }
 
     @Override
     public boolean equals(Object o) {

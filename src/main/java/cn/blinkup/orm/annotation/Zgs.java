@@ -14,4 +14,6 @@ import java.lang.annotation.Target;
 public @interface Zgs {
     //请求路径
     String value();
+    //请求方法
+    String method();
 }
