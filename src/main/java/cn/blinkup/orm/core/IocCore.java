@@ -1,7 +1,6 @@
 package cn.blinkup.orm.core;
 
 import cn.blinkup.orm.annotation.Inject;
-import cn.blinkup.orm.core.BeanContainer;
 import cn.blinkup.orm.utils.ReflectionUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -21,11 +20,8 @@ public class IocCore {
         Map<Class<?>, Object> beanMap = BeanContainer.getBeanMap();
         if(CollectionUtils.isNotEmpty(Collections.singleton(beanMap))){
             beanMap.forEach((k, v) ->{
-                //获取类的实例
-                Class<?> beanClass = k;
-                Object beanInstance = v;
-                //获取类的成员变量
-                Field[] beanFields = beanClass.getDeclaredFields();
+                //获取类的实例和成员变量
+                Field[] beanFields = k.getDeclaredFields();
                 if(ArrayUtils.isNotEmpty(beanFields)){
                     for (Field beanField : beanFields) {
                         if(beanField.isAnnotationPresent(Inject.class)){
@@ -33,7 +29,7 @@ public class IocCore {
                             Object beanFieldInstance = beanMap.get(beanFieldClass);
                             if(null != beanFieldInstance){
                                 //通过反射初始化BeanField的Value
-                                ReflectionUtil.setField(beanInstance, beanField, beanFieldInstance);
+                                ReflectionUtil.setField(v, beanField, beanFieldInstance);
                             }
                         }
                     }

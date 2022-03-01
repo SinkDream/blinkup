@@ -8,9 +8,9 @@ import java.util.Map;
  * 视图对象
  */
 public class View {
-    private String path;
+    private final String path;
 
-    private Map<String, Object> model;
+    private final Map<String, Object> model;
 
     public View(String path){
         this.path = path;

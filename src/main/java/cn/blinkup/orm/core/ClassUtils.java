@@ -20,6 +20,10 @@ public class ClassUtils {
         CLASS_SET = CustomizeClassLoader.getClassSet(basePackage);
     }
 
+    /**
+     * 获取字节码集合
+     * @return 字节码集合
+     */
     public static Set<Class<?>> getClassSet(){
         return CLASS_SET;
     }
@@ -34,6 +38,10 @@ public class ClassUtils {
         return classSet;
     }
 
+    /**
+     * 获取被Controller注解的类
+     * @return 被Controller注解的类
+     */
     public static Set<Class<?>> getControllerClassSet(){
         Set<Class<?>> classSet = new HashSet<>();
         for (Class<?> clazz : CLASS_SET) {
@@ -44,8 +52,12 @@ public class ClassUtils {
         return classSet;
     }
 
+    /**
+     * 获取Bean
+     * @return Bean实例
+     */
     public static Set<Class<?>> getBeanClassSet(){
-        Set<Class<?>> beanClassSet = new HashSet<Class<?>>();
+        Set<Class<?>> beanClassSet = new HashSet<>();
         beanClassSet.addAll(getServiceClassSet());
         beanClassSet.addAll(getControllerClassSet());
         return beanClassSet;

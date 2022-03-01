@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -25,7 +24,7 @@ public final class CustomizeClassLoader {
 
     /**
      * 获取当前线程的类加载器
-     * @return
+     * @return 当前线程的类加载器
      */
     public static ClassLoader getClassLoader(){
         return Thread.currentThread().getContextClassLoader();
@@ -50,8 +49,8 @@ public final class CustomizeClassLoader {
 
     /**
      * 获取指定包名下所有的类
-     * @param packageName
-     * @return
+     * @param packageName 包名
+     * @return 包名下所有的类的集合
      */
     public static Set<Class<?>> getClassSet(String packageName){
         Set<Class<?>> classSet = new HashSet<>();
@@ -61,14 +60,14 @@ public final class CustomizeClassLoader {
                 URL url = urls.nextElement();
                 if(null != url){
                     String protocol = url.getProtocol();
-                    if(protocol.equals("file")){
+                    if("file".equals(protocol)){
                         //过滤空格
                         String packagePath = url.getPath().replaceAll("%20", "");
                         addClass(classSet, packagePath, packageName);
-                    } else if(protocol.equals("jar")){
-                        JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
-                        if(null != jarURLConnection){
-                            JarFile jarFile = jarURLConnection.getJarFile();
+                    } else if("jar".equals(protocol)){
+                        JarURLConnection jarUrlConnection = (JarURLConnection) url.openConnection();
+                        if(null != jarUrlConnection){
+                            JarFile jarFile = jarUrlConnection.getJarFile();
                             if(null != jarFile){
                                 Enumeration<JarEntry> jarEntries = jarFile.entries();
                                 while (jarEntries.hasMoreElements()){
@@ -91,12 +90,10 @@ public final class CustomizeClassLoader {
     }
 
     private static void addClass(Set<Class<?>> classSet, String packagePath, String packageName){
-        File[] files = new File(packagePath).listFiles(new FileFilter(){
-            @Override
-            public boolean accept(File pathname) {
-                return (pathname.isFile() && pathname.getName().endsWith(".class")) || pathname.isDirectory();
-            }
-        });
+        File[] files = new File(packagePath).listFiles(pathname -> (pathname.isFile() && pathname.getName().endsWith(".class")) || pathname.isDirectory());
+        if(null == files){
+            throw new RuntimeException();
+        }
         for (File file : files) {
             String fileName = file.getName();
             if(file.isFile()){

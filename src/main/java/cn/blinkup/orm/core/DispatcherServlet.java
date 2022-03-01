@@ -35,7 +35,7 @@ public class DispatcherServlet extends HttpServlet {
     private static final String ROOT_CHARACTER = "/";
 
     @Override
-    public void init(ServletConfig servletConfig) throws ServletException {
+    public void init(ServletConfig servletConfig) {
         //初始化相关类
         FrameLoader.init();
         ServletContext servletContext = servletConfig.getServletContext();

@@ -4,7 +4,7 @@ package cn.blinkup.orm.bean;
  * @author zhangguosheng
  */
 public class Data {
-    private Object model;
+    private final Object model;
 
     public Data(Object model) {
         this.model = model;

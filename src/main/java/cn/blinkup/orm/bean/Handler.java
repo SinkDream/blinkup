@@ -7,9 +7,9 @@ import java.lang.reflect.Method;
  */
 public class Handler {
 
-    private Class<?> controllerClass;
+    private final Class<?> controllerClass;
 
-    private Method actionMethod;
+    private final Method actionMethod;
 
     public Handler(Class<?> controllerClass, Method actionMethod){
         this.controllerClass = controllerClass;
