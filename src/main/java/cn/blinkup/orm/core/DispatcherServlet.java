@@ -85,9 +85,7 @@ public class DispatcherServlet extends HttpServlet {
                         resp.sendRedirect(req.getContextPath() + path);
                     }else{
                         Map<String, Object> model = view.getModel();
-                        model.forEach((k,v) -> {
-                            req.setAttribute(k, v);
-                        });
+                        model.forEach(req::setAttribute);
                         req.getRequestDispatcher(ConfigHelper.getJSPPath() + path).forward(req, resp);
                     }
                 }

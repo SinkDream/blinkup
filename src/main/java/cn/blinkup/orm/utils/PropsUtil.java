@@ -48,7 +48,7 @@ public class PropsUtil {
 
         public static String getString(Properties properties, String key, String defaultValue){
             String value = defaultValue;
-            if(properties.contains(key)){
+            if(null != properties.getProperty(key)){
                 value = properties.getProperty(key);
             }
             return value;
