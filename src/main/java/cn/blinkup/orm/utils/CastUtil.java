@@ -16,6 +16,11 @@ public class CastUtil {
         return null != object ? String.valueOf(object) : defaultValue;
     }
 
+    /**
+     * 强制转换为double类型
+     * @param object 任意输入
+     * @return object的double类型
+     */
     public static double castDouble(Object object){
         return CastUtil.castDouble(object, 0);
     }
