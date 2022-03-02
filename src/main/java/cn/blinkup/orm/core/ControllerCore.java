@@ -28,7 +28,7 @@ public final class ControllerCore {
                         if(declaredMethod.isAnnotationPresent(Zgs.class)){
                             Zgs zgs = declaredMethod.getAnnotation(Zgs.class);
                             String pathMapping = zgs.value();
-                            String method = zgs.method();
+                            String method = zgs.method().toUpperCase();
                             Request request = new Request(method, pathMapping);
                             Handler handler = new Handler(clazz, declaredMethod);
                             ACTION_MAP.put(request, handler);
