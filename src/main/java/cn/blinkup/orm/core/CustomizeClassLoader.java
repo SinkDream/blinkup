@@ -89,6 +89,12 @@ public final class CustomizeClassLoader {
         return classSet;
     }
 
+    /**
+     *
+     * @param classSet
+     * @param packagePath
+     * @param packageName
+     */
     private static void addClass(Set<Class<?>> classSet, String packagePath, String packageName){
         File[] files = new File(packagePath).listFiles(pathname -> (pathname.isFile() && pathname.getName().endsWith(".class")) || pathname.isDirectory());
         if(null == files){
