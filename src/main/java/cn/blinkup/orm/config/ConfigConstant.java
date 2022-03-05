@@ -6,12 +6,12 @@ package cn.blinkup.orm.config;
  */
 public interface ConfigConstant {
     String CONFIG_FILE = "config.properties";
-    String JDBC_DRIVER = "jdbc.driver";
-    String JDBC_URL = "jdbc.url";
-    String JDBC_USERNAME = "jdbc.username";
-    String JDBC_PASSWORD = "jdbc.password";
+    String JDBC_DRIVER = "db.driver";
+    String JDBC_URL = "db.url";
+    String JDBC_USERNAME = "db.username";
+    String JDBC_PASSWORD = "db.password";
 
-    String BASE_PACKAGE = "base_package";
-    String JSP_PATH = "jsp_path";
-    String ASSET_PATH = "asset_path";
+    String BASE_PACKAGE = "path.package";
+    String JSP_PATH = "path.jsp";
+    String ASSET_PATH = "path.asset";
 }
