@@ -22,3 +22,5 @@
 * path.jsp
 * path.asset
 
+Controller接口类使用@Controller注解
+
