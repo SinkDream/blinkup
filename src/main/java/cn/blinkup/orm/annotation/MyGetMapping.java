@@ -6,14 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author zhangguosheng
- * Action方法注解
+ * @author joe
+ * 处理GET请求
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Zgs {
-    //请求路径
+public @interface MyGetMapping {
     String value();
-    //请求方法
-    String method();
 }

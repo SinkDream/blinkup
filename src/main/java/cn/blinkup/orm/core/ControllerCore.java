@@ -1,6 +1,7 @@
 package cn.blinkup.orm.core;
 
-import cn.blinkup.orm.annotation.Zgs;
+import cn.blinkup.orm.annotation.MyGetMapping;
+import cn.blinkup.orm.annotation.MyPostMapping;
 import cn.blinkup.orm.bean.Handler;
 import cn.blinkup.orm.bean.Request;
 import org.apache.commons.collections4.CollectionUtils;
@@ -18,6 +19,9 @@ public final class ControllerCore {
 
     private static final Map<Request, Handler> ACTION_MAP = new HashMap<>();
 
+    private static final String POST_REQUEST = "POST";
+    private static final String GET_REQUEST = "GET";
+
     static{
         Set<Class<?>> controllerClassSet = ClassUtils.getControllerClassSet();
         if(CollectionUtils.isNotEmpty(controllerClassSet)){
@@ -25,11 +29,17 @@ public final class ControllerCore {
                 Method[] declaredMethods = clazz.getDeclaredMethods();
                 if(ArrayUtils.isNotEmpty(declaredMethods)){
                     for (Method declaredMethod : declaredMethods) {
-                        if(declaredMethod.isAnnotationPresent(Zgs.class)){
-                            Zgs zgs = declaredMethod.getAnnotation(Zgs.class);
-                            String pathMapping = zgs.value();
-                            String method = zgs.method().toUpperCase();
-                            Request request = new Request(method, pathMapping);
+                        //处理POST请求
+                        if(declaredMethod.isAnnotationPresent(MyPostMapping.class)){
+                            MyPostMapping zgs = declaredMethod.getAnnotation(MyPostMapping.class);
+                            Request request = new Request(POST_REQUEST, zgs.value());
+                            Handler handler = new Handler(clazz, declaredMethod);
+                            ACTION_MAP.put(request, handler);
+                        }
+                        //处理GET请求
+                        if(declaredMethod.isAnnotationPresent(MyGetMapping.class)){
+                            MyGetMapping zgs = declaredMethod.getAnnotation(MyGetMapping.class);
+                            Request request = new Request(GET_REQUEST, zgs.value());
                             Handler handler = new Handler(clazz, declaredMethod);
                             ACTION_MAP.put(request, handler);
                         }
