@@ -28,7 +28,7 @@ public class CodecUtils {
     public static String decodeURL(String source){
         String target = null;
         try {
-            URLDecoder.decode(source, "UTF-8");
+            target = URLDecoder.decode(source, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             LOGGER.error("解码失败" + e.getMessage());

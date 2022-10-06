@@ -6,11 +6,10 @@ import cn.blinkup.orm.bean.Handler;
 import cn.blinkup.orm.bean.RequestParam;
 import cn.blinkup.orm.bean.View;
 import cn.blinkup.orm.config.ConfigHelper;
-import cn.blinkup.orm.utils.CodecUtils;
 import cn.blinkup.orm.utils.ReflectionUtil;
 import cn.blinkup.orm.utils.StreamUtils;
 import com.alibaba.fastjson.JSON;
-import org.apache.commons.lang3.ArrayUtils;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.*;
@@ -24,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 请求转发器
@@ -62,18 +62,10 @@ public class DispatcherServlet extends HttpServlet {
                 String paramValue = req.getParameter(paramName);
                 paramMap.put(paramName, paramValue);
             }
-            String body = CodecUtils.decodeURL(StreamUtils.getString(req.getInputStream()));
-            if(StringUtils.isNotEmpty(body)){
-                String[] params = StringUtils.split(body, "&");
-                if(ArrayUtils.isNotEmpty(params)){
-                    for (String param : params) {
-                        String[] split = StringUtils.split(param, "=");
-                        String paramName = split[0];
-                        String paramValue = split[1];
-                        paramMap.put(paramName, paramValue);
-                    }
-                }
-            }
+            String body = StreamUtils.getString(req.getInputStream());
+            JSONObject jsonObject = JSONObject.parseObject(body);
+            Set<String> keySet = jsonObject.keySet();
+            keySet.forEach( key -> paramMap.put(key, jsonObject.get(key)));
             RequestParam requestParam = new RequestParam(paramMap);
             Method actionMethod = handler.getActionMethod();
             Object result = ReflectionUtil.invokeMethod(bean, actionMethod, requestParam);
