@@ -41,7 +41,7 @@ public class ReflectionUtil {
         Object result = null;
         try{
             method.setAccessible(true);
-            result = method.invoke(object);
+            result = method.invoke(object, args);
         } catch (IllegalAccessException | InvocationTargetException e) {
             LOGGER.error("反射调用方法失败" + e.getMessage());
             e.printStackTrace();
