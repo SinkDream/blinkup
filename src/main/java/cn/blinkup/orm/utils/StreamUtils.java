@@ -14,12 +14,13 @@ public class StreamUtils {
 
     public static String getString(InputStream inputStream){
         StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String line = null;
+        String line;
         try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             line = bufferedReader.readLine();
             while(null != line){
                 stringBuilder.append(line);
+                line = bufferedReader.readLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
