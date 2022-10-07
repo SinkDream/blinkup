@@ -63,9 +63,11 @@ public class DispatcherServlet extends HttpServlet {
                 paramMap.put(paramName, paramValue);
             }
             String body = StreamUtils.getString(req.getInputStream());
-            JSONObject jsonObject = JSONObject.parseObject(body);
-            Set<String> keySet = jsonObject.keySet();
-            keySet.forEach( key -> paramMap.put(key, jsonObject.get(key)));
+            if(StringUtils.isNotEmpty(body)){
+                JSONObject jsonObject = JSONObject.parseObject(body);
+                Set<String> keySet = jsonObject.keySet();
+                keySet.forEach( key -> paramMap.put(key, jsonObject.get(key)));
+            }
             RequestParam requestParam = new RequestParam(paramMap);
             Method actionMethod = handler.getActionMethod();
             Object result = ReflectionUtil.invokeMethod(bean, actionMethod, requestParam);
